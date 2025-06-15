@@ -1,0 +1,24 @@
+.dark-mode-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s;
+  color: #333;
+  outline: none;
+  font-size: 1.5rem;
+}
+.dark-mode-toggle.dark {
+  color: #ffd700;
+}
+.dark-mode-toggle:focus {
+  outline: 2px solid #888;
+}
+
+/* Optional: animate icon */
+.dark-mode-toggle svg {
+  transition: color 0.2s, transform 0.2s;
+}
+.dark-mode-toggle:active svg {
+  transform: scale(0.95);
+}
