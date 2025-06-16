@@ -50,20 +50,22 @@ function App() {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
       <div style={{ position: 'absolute', top: 16, right: 16 }}>
         <DarkModeToggle />
       </div>
-      {cards.map(card => (
-        <WeatherCard
-          key={card.id}
-          id={card.id}
-          location={card.location}
-          condition={card.condition}
-          onRemove={id => setCards(cards.filter(c => c.id !== id))}
-        />
-      ))}
-      <AddWeatherCard onAdd={handleAddCard} />
+      <div style={{ display: 'flex', overflowX: 'auto', padding: '16px', flexShrink: 0 }}>
+        {cards.map(card => (
+          <WeatherCard
+            key={card.id}
+            id={card.id}
+            location={card.location}
+            condition={card.condition}
+            onRemove={id => setCards(cards.filter(c => c.id !== id))}
+          />
+        ))}
+        <AddWeatherCard onAdd={handleAddCard} />
+      </div>
     </div>
   )
 }
