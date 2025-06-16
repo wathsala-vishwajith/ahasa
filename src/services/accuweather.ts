@@ -10,17 +10,17 @@ export interface AccuWeatherLocation {
 export interface AccuWeatherCurrentCondition {
   LocalObservationDateTime: string;
   WeatherText: string;
-  WeatherIcon: number;
+  WeatherIcon: number | null;
   IsDayTime: boolean;
   Temperature: {
-    Metric: { Value: number; Unit: string };
-    Imperial: { Value: number; Unit: string };
+    Metric: { Value: number | null; Unit: string };
+    Imperial: { Value: number | null; Unit: string };
   };
   RealFeelTemperature: {
-    Metric: { Value: number; Unit: string };
-    Imperial: { Value: number; Unit: string };
+    Metric: { Value: number | null; Unit: string };
+    Imperial: { Value: number | null; Unit: string };
   };
-  RelativeHumidity: number;
+  RelativeHumidity: number | null;
   Wind: {
     Speed: { Metric: { Value: number; Unit: string } };
   };
