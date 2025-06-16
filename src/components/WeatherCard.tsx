@@ -32,6 +32,7 @@ const getCardBackground = (isDay: boolean) => {
 export interface WeatherCardProps {
   id: string;
   initialLocation?: string;
+  onRemove?: (id: string) => void;
 }
 
 interface WeatherData {
@@ -54,7 +55,7 @@ const defaultData: WeatherData = {
   isDay: true,
 };
 
-const WeatherCard: React.FC<WeatherCardProps> = ({ id, initialLocation }) => {
+const WeatherCard: React.FC<WeatherCardProps> = ({ id, initialLocation, onRemove }) => {
   const [data, setData] = useState<WeatherData>(() => {
     const saved = localStorage.getItem('weathercard-' + id);
     return saved ? JSON.parse(saved) : { ...defaultData, location: initialLocation || defaultData.location };
@@ -95,8 +96,31 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, initialLocation }) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        position: 'relative',
       }}
     >
+      {onRemove && (
+        <button
+          onClick={() => onRemove(id)}
+          style={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            background: 'rgba(0,0,0,0.08)',
+            border: 'none',
+            borderRadius: '50%',
+            width: 32,
+            height: 32,
+            fontSize: 20,
+            cursor: 'pointer',
+            color: data.isDay ? '#232946' : '#fff',
+            zIndex: 1,
+          }}
+          aria-label="Remove card"
+        >
+          ×
+        </button>
+      )}
       <div style={{ fontWeight: 700, fontSize: 28, marginBottom: 8 }}>{data.location}</div>
       <div>{getWeatherIcon(data.weather, data.isDay)}</div>
       <div style={{ fontSize: 40, fontWeight: 700, margin: '8px 0' }}>{data.temp}K</div>
@@ -115,44 +139,6 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, initialLocation }) => {
           <div style={{ fontSize: 16 }}>{data.feelsLike}K</div>
         </div>
       </div>
-      <form
-        onSubmit={e => {
-          e.preventDefault();
-          if (locationInput.trim()) fetchWeather(locationInput.trim());
-        }}
-        style={{ marginTop: 20, width: '100%' }}
-      >
-        <input
-          type="text"
-          placeholder="Change location..."
-          value={locationInput}
-          onChange={e => setLocationInput(e.target.value)}
-          style={{
-            width: '100%',
-            padding: 8,
-            borderRadius: 8,
-            border: '1px solid #ccc',
-            fontSize: 16,
-            marginBottom: 8,
-          }}
-        />
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            padding: 8,
-            borderRadius: 8,
-            border: 'none',
-            background: data.isDay ? '#ffb700' : '#232946',
-            color: data.isDay ? '#232946' : '#fff',
-            fontWeight: 700,
-            fontSize: 16,
-            cursor: 'pointer',
-          }}
-        >
-          Update
-        </button>
-      </form>
     </div>
   );
 };
