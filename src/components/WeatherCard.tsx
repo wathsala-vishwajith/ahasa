@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { WiDaySunny, WiNightClear, WiCloudy, WiRain, WiSnow, WiThunderstorm, WiFog, WiStrongWind, WiHumidity, WiThermometer } from 'react-icons/wi';
+import { FaSpinner } from 'react-icons/fa';
 import type { AccuWeatherCurrentCondition } from '../services/accuweather';
 
 // Helper to get icon based on weather
@@ -52,12 +53,32 @@ export interface WeatherCardProps {
   location: string;
   condition?: AccuWeatherCurrentCondition | null;
   onRemove?: (id: string) => void;
+  onClick?: () => void;
 }
 
-const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRemove }) => {
+const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRemove, onClick }) => {
   if (!condition) {
-    // Render a loading state or a placeholder
-    return <div>Loading weather for {location}...</div>;
+    return (
+      <div
+        style={{
+          width: 260,
+          borderRadius: 24,
+          padding: 24,
+          background: 'rgba(200,200,200,0.2)',
+          color: '#232946',
+          boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
+          margin: 16,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          minHeight: 360,
+        }}
+      >
+        <FaSpinner className="animate-spin" size={50} />
+      </div>
+    );
   }
 
   const {
@@ -75,6 +96,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
 
   return (
     <div
+      onClick={onClick}
       style={{
         width: 260,
         borderRadius: 24,
@@ -88,11 +110,15 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
         alignItems: 'center',
         position: 'relative',
         minHeight: 360,
+        cursor: onClick ? 'pointer' : 'default',
       }}
     >
       {onRemove && (
         <button
-          onClick={() => onRemove(id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(id);
+          }}
           style={{
             position: 'absolute',
             top: 12,

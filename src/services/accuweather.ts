@@ -38,7 +38,7 @@ export async function fetchLocationAutocomplete(query: string): Promise<AccuWeat
 
 export async function fetchCurrentCondition(locationKey: string): Promise<AccuWeatherCurrentCondition | null> {
   const apiKey = getAccuWeatherApiKey();
-  const url = `${BASE_URL}/currentconditions/v1/${locationKey}?apikey=${apiKey}`;
+  const url = `${BASE_URL}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('Failed to fetch current condition');
   const data = await res.json();

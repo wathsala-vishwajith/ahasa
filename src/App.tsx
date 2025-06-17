@@ -5,6 +5,7 @@ import AddWeatherCard from './components/AddWeatherCard';
 import React, { useEffect, useState } from 'react';
 import { fetchCurrentCondition } from './services/accuweather';
 import type { AccuWeatherCurrentCondition } from './services/accuweather';
+import Modal from './components/Modal';
 
 interface CardData {
   id: string;
@@ -19,6 +20,7 @@ function App() {
     { id: 'london', location: 'London', locationKey: '328328' },
     { id: 'tokyo', location: 'Tokyo', locationKey: '226396' },
   ]);
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
   useEffect(() => {
     const fetchInitialConditions = async () => {
@@ -49,6 +51,14 @@ function App() {
     }
   };
 
+  const handleCardClick = (card: CardData) => {
+    setSelectedCard(card);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCard(null);
+  };
+
   return (
     <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
       <div style={{ position: 'absolute', top: 16, right: 16 }}>
@@ -62,10 +72,20 @@ function App() {
             location={card.location}
             condition={card.condition}
             onRemove={id => setCards(cards.filter(c => c.id !== id))}
+            onClick={() => handleCardClick(card)}
           />
         ))}
         <AddWeatherCard onAdd={handleAddCard} />
       </div>
+
+      <Modal isOpen={!!selectedCard} onClose={handleCloseModal}>
+        {selectedCard && (
+          <div>
+            <h2>{selectedCard.location}</h2>
+            {/* Future tabs will go here */}
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }
