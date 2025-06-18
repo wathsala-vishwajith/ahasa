@@ -15,18 +15,55 @@ interface CardData {
   condition?: AccuWeatherCurrentCondition | null;
 }
 
+// Local storage key for saved weather cards
+const STORAGE_KEY = 'ahasa-weather-cards';
+
+// Helper functions for localStorage
+const saveCardsToStorage = (cards: CardData[]) => {
+  try {
+    // Only save essential data (without condition data)
+    const cardsToSave = cards.map(card => ({
+      id: card.id,
+      location: card.location,
+      locationKey: card.locationKey
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cardsToSave));
+  } catch (error) {
+    console.error('Failed to save cards to localStorage:', error);
+  }
+};
+
+const loadCardsFromStorage = (): CardData[] => {
+  try {
+    const savedCards = localStorage.getItem(STORAGE_KEY);
+    if (savedCards) {
+      return JSON.parse(savedCards);
+    }
+  } catch (error) {
+    console.error('Failed to load cards from localStorage:', error);
+  }
+  return [];
+};
+
 function App() {
-  const [cards, setCards] = useState<CardData[]>([
-    { id: 'cairo', location: 'Cairo', locationKey: '127164' },
-    { id: 'london', location: 'London', locationKey: '328328' },
-    { id: 'tokyo', location: 'Tokyo', locationKey: '226396' },
-  ]);
+  const [cards, setCards] = useState<CardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [detailedWeatherData, setDetailedWeatherData] = useState<any | null>(null);
   const [loadingDetailedData, setLoadingDetailedData] = useState(false);
 
+  // Load cards from localStorage on app initialization
+  useEffect(() => {
+    const savedCards = loadCardsFromStorage();
+    if (savedCards.length > 0) {
+      setCards(savedCards);
+    }
+  }, []);
+
+  // Fetch weather conditions for loaded cards
   useEffect(() => {
     const fetchInitialConditions = async () => {
+      if (cards.length === 0) return;
+      
       const updatedCards = await Promise.all(
         cards.map(async (card) => {
           if (card.locationKey && !card.condition) {
@@ -45,13 +82,28 @@ function App() {
     };
 
     fetchInitialConditions();
-  }, []); // Run only once on initial load
+  }, [cards.length]); // Only run when cards are first loaded or count changes
+
+  // Save cards to localStorage whenever cards change
+  useEffect(() => {
+    if (cards.length > 0) {
+      saveCardsToStorage(cards);
+    } else {
+      // Clear storage when no cards remain
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  }, [cards]);
 
   const handleAddCard = (city: string, locationKey?: string, condition?: any) => {
     const id = (locationKey || city.toLowerCase().replace(/\s+/g, '-'));
     if (!cards.some(card => card.id === id)) {
-      setCards([...cards, { id, location: city, locationKey, condition }]);
+      const newCard = { id, location: city, locationKey, condition };
+      setCards(prevCards => [...prevCards, newCard]);
     }
+  };
+
+  const handleRemoveCard = (id: string) => {
+    setCards(prevCards => prevCards.filter(c => c.id !== id));
   };
 
   const handleCardClick = async (card: CardData) => {
@@ -100,19 +152,38 @@ function App() {
         padding: '60px 8px 8px 8px', 
         flexShrink: 0,
         height: '100%',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: cards.length === 0 ? 'center' : 'flex-start'
       }}>
-        {cards.map(card => (
-          <WeatherCard
-            key={card.id}
-            id={card.id}
-            location={card.location}
-            condition={card.condition}
-            onRemove={id => setCards(cards.filter(c => c.id !== id))}
-            onClick={() => handleCardClick(card)}
-          />
-        ))}
-        <AddWeatherCard onAdd={handleAddCard} />
+        {cards.length === 0 ? (
+          <div style={{
+            textAlign: 'center',
+            color: document.documentElement.classList.contains('dark') ? 'rgba(255, 255, 255, 0.7)' : 'rgba(35, 41, 70, 0.7)',
+            marginBottom: '120px'
+          }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '8px', fontWeight: 600 }}>
+              Welcome to Ahasa Weather
+            </h2>
+            <p style={{ fontSize: '16px', marginBottom: '24px' }}>
+              Start by adding your first city to see the weather
+            </p>
+            <AddWeatherCard onAdd={handleAddCard} />
+          </div>
+        ) : (
+          <>
+            {cards.map(card => (
+              <WeatherCard
+                key={card.id}
+                id={card.id}
+                location={card.location}
+                condition={card.condition}
+                onRemove={handleRemoveCard}
+                onClick={() => handleCardClick(card)}
+              />
+            ))}
+            <AddWeatherCard onAdd={handleAddCard} />
+          </>
+        )}
       </div>
 
       <Modal isOpen={!!selectedCard} onClose={handleCloseModal}>
