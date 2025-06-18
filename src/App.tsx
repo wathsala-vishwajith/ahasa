@@ -3,9 +3,10 @@ import DarkModeToggle from './components/DarkModeToggle/DarkModeToggle';
 import WeatherCard from './components/WeatherCard';
 import AddWeatherCard from './components/AddWeatherCard';
 import React, { useEffect, useState } from 'react';
-import { fetchCurrentCondition } from './services/accuweather';
+import { fetchCurrentCondition, fetchDetailedCurrentCondition } from './services/accuweather';
 import type { AccuWeatherCurrentCondition } from './services/accuweather';
 import Modal from './components/Modal';
+import WeatherDetailsView from './components/WeatherDetailsView';
 
 interface CardData {
   id: string;
@@ -21,6 +22,8 @@ function App() {
     { id: 'tokyo', location: 'Tokyo', locationKey: '226396' },
   ]);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+  const [detailedWeatherData, setDetailedWeatherData] = useState<any | null>(null);
+  const [loadingDetailedData, setLoadingDetailedData] = useState(false);
 
   useEffect(() => {
     const fetchInitialConditions = async () => {
@@ -51,12 +54,27 @@ function App() {
     }
   };
 
-  const handleCardClick = (card: CardData) => {
+  const handleCardClick = async (card: CardData) => {
     setSelectedCard(card);
+    setDetailedWeatherData(null);
+    
+    if (card.locationKey) {
+      setLoadingDetailedData(true);
+      try {
+        const detailedData = await fetchDetailedCurrentCondition(card.locationKey);
+        setDetailedWeatherData(detailedData);
+      } catch (error) {
+        console.error(`Failed to fetch detailed weather for ${card.location}`, error);
+      } finally {
+        setLoadingDetailedData(false);
+      }
+    }
   };
 
   const handleCloseModal = () => {
     setSelectedCard(null);
+    setDetailedWeatherData(null);
+    setLoadingDetailedData(false);
   };
 
   return (
@@ -81,8 +99,40 @@ function App() {
       <Modal isOpen={!!selectedCard} onClose={handleCloseModal}>
         {selectedCard && (
           <div>
-            <h2>{selectedCard.location}</h2>
-            {/* Future tabs will go here */}
+            {loadingDetailedData ? (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '40px',
+                color: '#6b7280' 
+              }}>
+                <div style={{ fontSize: '18px', marginBottom: '16px' }}>
+                  Loading detailed weather data...
+                </div>
+                <div style={{ 
+                  width: '40px', 
+                  height: '40px', 
+                  border: '4px solid #e5e7eb',
+                  borderTop: '4px solid #3b82f6',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  margin: '0 auto'
+                }} />
+              </div>
+            ) : detailedWeatherData ? (
+              <WeatherDetailsView 
+                location={selectedCard.location} 
+                weatherData={detailedWeatherData} 
+              />
+            ) : (
+              <div style={{ 
+                textAlign: 'center', 
+                padding: '40px',
+                color: '#6b7280' 
+              }}>
+                <h2 style={{ marginBottom: '16px' }}>{selectedCard.location}</h2>
+                <p>Unable to load detailed weather data</p>
+              </div>
+            )}
           </div>
         )}
       </Modal>

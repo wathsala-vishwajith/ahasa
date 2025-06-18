@@ -9,10 +9,25 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
 
+  const isDarkMode = document.documentElement.classList.contains('dark');
+
   return (
     <div style={styles.overlay} onClick={onClose}>
-      <div style={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button style={styles.closeButton} onClick={onClose}>
+      <div 
+        style={{
+          ...styles.modal,
+          background: isDarkMode ? '#1f2937' : '#fff',
+          color: isDarkMode ? '#f9fafb' : '#1f2937',
+        }} 
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button 
+          style={{
+            ...styles.closeButton,
+            color: isDarkMode ? '#f9fafb' : '#1f2937',
+          }} 
+          onClick={onClose}
+        >
           &times;
         </button>
         {children}
@@ -28,21 +43,24 @@ const styles: { [key: string]: React.CSSProperties } = {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+    backdropFilter: 'blur(8px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
+    padding: '20px',
   },
   modal: {
     background: '#fff',
     padding: '20px',
-    borderRadius: '8px',
+    borderRadius: '16px',
     position: 'relative',
-    width: '90%',
-    maxWidth: '500px',
-    maxHeight: '90vh',
+    width: '95%',
+    maxWidth: '800px',
+    maxHeight: '95vh',
     overflowY: 'auto',
+    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
   },
   closeButton: {
     position: 'absolute',

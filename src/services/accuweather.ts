@@ -44,3 +44,12 @@ export async function fetchCurrentCondition(locationKey: string): Promise<AccuWe
   const data = await res.json();
   return data[0] || null;
 }
+
+export async function fetchDetailedCurrentCondition(locationKey: string): Promise<any | null> {
+  const apiKey = getAccuWeatherApiKey();
+  const url = `${BASE_URL}/currentconditions/v1/${locationKey}?apikey=${apiKey}&details=true`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch detailed current condition');
+  const data = await res.json();
+  return data[0] || null;
+}
