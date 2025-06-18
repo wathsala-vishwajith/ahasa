@@ -1,0 +1,106 @@
+/* Weather Animation Keyframes */
+@keyframes rainDrop {
+  0% { transform: translateY(-100px); opacity: 1; }
+  100% { transform: translateY(400px); opacity: 0; }
+}
+
+@keyframes splash {
+  0%, 80% { opacity: 0; transform: scaleX(0.5) scaleY(0.5); }
+  85% { opacity: 1; transform: scaleX(1.2) scaleY(0.8); }
+  100% { opacity: 0; transform: scaleX(1.5) scaleY(0.5); }
+}
+
+@keyframes snowFall {
+  0% { transform: translateY(-100px) translateX(0px); opacity: 1; }
+  100% { transform: translateY(400px) translateX(20px); opacity: 0; }
+}
+
+/* Realistic Cloud Styles */
+.cloud:before, .cloud:after {
+  content: '';
+  position: absolute; 
+  background: inherit;
+  border-radius: 50px;
+}
+
+.cloud:before {
+  width: 50px; 
+  height: 50px;
+  top: -25px; 
+  left: 10px;
+  transform: rotate(15deg);
+}
+
+.cloud:after {
+  width: 60px; 
+  height: 70px;
+  top: -35px; 
+  right: 10px;
+  transform: rotate(-15deg);
+}
+
+/* Cloud Animation Keyframes */
+@keyframes moveSlowClouds {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(450px); }
+}
+
+@keyframes moveMediumClouds {
+  0% { transform: translateX(0) scale(0.7); }
+  100% { transform: translateX(400px) scale(0.7); }
+}
+
+@keyframes moveFastClouds {
+  0% { transform: translateX(0) scale(0.5); }
+  100% { transform: translateX(380px) scale(0.5); }
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes cloudMove {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes cloudMoveReverse {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes cloudPuff {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes sunPulse {
+  0%, 100% { box-shadow: 0 0 24px 4px #ffe06688; }
+  50% { box-shadow: 0 0 36px 12px #ffe066cc; }
+}
+
+@keyframes sunRayPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+@keyframes sunRaysRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fogMove {
+  0%, 100% { transform: translateX(0); opacity: 0.4; }
+  50% { transform: translateX(30px); opacity: 0.7; }
+}
+
+@keyframes fogMoveReverse {
+  0%, 100% { transform: translateX(0); opacity: 0.3; }
+  50% { transform: translateX(-30px); opacity: 0.6; }
+} 
