@@ -78,11 +78,30 @@ function App() {
   };
 
   return (
-    <div style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      <div style={{ position: 'absolute', top: 16, right: 16 }}>
+    <div style={{ 
+      position: 'relative', 
+      height: '100vh', 
+      display: 'flex', 
+      flexDirection: 'column',
+      overflow: 'hidden'
+    }}>
+      <div style={{ 
+        position: 'absolute', 
+        top: '8px', 
+        right: '8px',
+        zIndex: 10
+      }}>
         <DarkModeToggle />
       </div>
-      <div style={{ display: 'flex', overflowX: 'auto', padding: '16px', flexShrink: 0 }}>
+      <div style={{ 
+        display: 'flex', 
+        overflowX: 'auto', 
+        overflowY: 'hidden',
+        padding: '60px 8px 8px 8px', 
+        flexShrink: 0,
+        height: '100%',
+        alignItems: 'center'
+      }}>
         {cards.map(card => (
           <WeatherCard
             key={card.id}

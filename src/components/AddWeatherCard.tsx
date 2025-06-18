@@ -74,22 +74,23 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
   return (
     <div
       style={{
-        width: 260,
+        width: window.innerWidth <= 768 ? 220 : 260,
         borderRadius: 24,
-        padding: 24,
+        padding: window.innerWidth <= 768 ? 16 : 24,
         background: getCardBackground(isDay),
         color: isDay ? '#232946' : '#fff',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-        margin: 16,
+        margin: window.innerWidth <= 768 ? 8 : 16,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: 360,
+        minHeight: window.innerWidth <= 768 ? 280 : 360,
         cursor: 'pointer',
         transition: 'all 0.2s ease-in-out',
         position: 'relative',
         transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+        flexShrink: 0,
       }}
       onClick={() => setShowInput(true)}
       onMouseEnter={() => setIsHovered(true)}

@@ -20,19 +20,20 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
     return (
       <div
         style={{
-          width: 260,
+          width: window.innerWidth <= 768 ? 220 : 260,
           borderRadius: 24,
-          padding: 24,
+          padding: window.innerWidth <= 768 ? 16 : 24,
           background: 'rgba(200,200,200,0.2)',
           color: '#232946',
           boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-          margin: 16,
+          margin: window.innerWidth <= 768 ? 8 : 16,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
           position: 'relative',
-          minHeight: 360,
+          minHeight: window.innerWidth <= 768 ? 280 : 360,
+          flexShrink: 0,
         }}
       >
         <FaSpinner className="animate-spin" size={50} />
@@ -57,20 +58,21 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
     <div
       onClick={onClick}
       style={{
-        width: 260,
+        width: window.innerWidth <= 768 ? 220 : 260,
         borderRadius: 24,
-        padding: 24,
+        padding: window.innerWidth <= 768 ? 16 : 24,
         background: getCardBackground(IsDayTime),
         color: IsDayTime ? '#232946' : '#fff',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
-        margin: 16,
+        margin: window.innerWidth <= 768 ? 8 : 16,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        minHeight: 360,
+        minHeight: window.innerWidth <= 768 ? 280 : 360,
         cursor: onClick ? 'pointer' : 'default',
         overflow: 'hidden',
+        flexShrink: 0,
       }}
     >
       {/* Weather Animation */}
