@@ -2,7 +2,7 @@ import './App.css'
 import DarkModeToggle from './components/DarkModeToggle/DarkModeToggle';
 import WeatherCard from './components/WeatherCard';
 import AddWeatherCard from './components/AddWeatherCard';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchCurrentCondition, fetchDetailedCurrentCondition } from './services/accuweather';
 import type { AccuWeatherCurrentCondition } from './services/accuweather';
 import Modal from './components/Modal';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { WiDaySunny, WiNightClear, WiCloudy, WiRain, WiSnow, WiThunderstorm, WiFog } from 'react-icons/wi';
 import {
   RainAnimation,
