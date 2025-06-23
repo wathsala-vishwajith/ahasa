@@ -51,7 +51,6 @@ function App() {
   const [cards, setCards] = useState<CardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [detailedWeatherData, setDetailedWeatherData] = useState<any | null>(null);
-  const [detailedWeatherExpires, setDetailedWeatherExpires] = useState<Date | null>(null);
   const [loadingDetailedData, setLoadingDetailedData] = useState(false);
   const darkMode = useDarkMode();
   const [autoRefresh, setAutoRefresh] = useState(() => {
@@ -180,13 +179,11 @@ function App() {
   const handleCardClick = async (card: CardData) => {
     setSelectedCard(card);
     setDetailedWeatherData(null);
-    setDetailedWeatherExpires(null);
     if (card.locationKey) {
       setLoadingDetailedData(true);
       try {
-        const { data, expires } = await fetchDetailedCurrentCondition(card.locationKey);
+        const { data } = await fetchDetailedCurrentCondition(card.locationKey);
         setDetailedWeatherData(data);
-        setDetailedWeatherExpires(expires);
       } catch (error) {
         console.error(`Failed to fetch detailed weather for ${card.location}`, error);
       } finally {
