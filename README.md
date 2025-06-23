@@ -1,54 +1,79 @@
-# React + TypeScript + Vite
+# Ahasa Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ahasa is a modern, fast, and beautiful weather app built with React and TypeScript. It uses the AccuWeather API to provide current conditions, daily and hourly forecasts, and supports dark mode, auto-refresh, and persistent local storage for your favorite locations.
 
-Currently, two official plugins are available:
+This was purely vibecoded using AI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
+- Search and add cities with autocomplete
+- View current weather, daily, and hourly forecasts
+- Tabbed modal for detailed weather and forecasts
+- Auto-refresh weather data based on API cache headers
+- Dark mode toggle
+- Responsive and mobile-friendly UI
+- Data persistence with localStorage
 
-## Expanding the ESLint configuration
+## Tech Stack
+- React + TypeScript
+- Vite
+- AccuWeather API
+- CSS (custom + minimal Tailwind)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Prerequisites
+- Node.js (v16 or newer recommended)
+- npm or yarn
+- [AccuWeather API key](https://developer.accuweather.com/)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Getting Started (Local Development)
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/ahasa.git
+   cd ahasa
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up your environment variables:**
+   - Copy `.env.example` to `.env` (or create `.env`):
+     ```env
+     VITE_ACCUWEATHER_API_KEY=your_accuweather_api_key_here
+     ```
+   - Get your API key from [AccuWeather Developer Portal](https://developer.accuweather.com/).
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+   The app will be available at [http://localhost:5173](http://localhost:5173) (or as shown in your terminal).
+
+## Deploying to Vercel
+
+1. **Push your code to GitHub (or GitLab/Bitbucket).**
+2. **Go to [Vercel](https://vercel.com/) and import your repository.**
+3. **Set the environment variable in Vercel dashboard:**
+   - `VITE_ACCUWEATHER_API_KEY=your_accuweather_api_key_here`
+4. **Deploy!**
+
+Vercel will automatically detect the Vite/React app and build it. Your app will be live on your Vercel domain.
+
+## Example .env
+```
+VITE_ACCUWEATHER_API_KEY=your_accuweather_api_key_here
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Contributing
+Pull requests and issues are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## License
+GNU General Public License v3.0
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Contact
+For questions, suggestions, or support, open an issue.
