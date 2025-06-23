@@ -78,7 +78,7 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
         borderRadius: 24,
         padding: window.innerWidth <= 768 ? 16 : 24,
         background: getCardBackground(isDay),
-        color: isDay ? '#232946' : '#fff',
+        color: isDay ? '#1f2937' : '#f9fafb',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
         margin: window.innerWidth <= 768 ? 8 : 16,
         display: 'flex',
@@ -107,7 +107,7 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
           }}>+</div>
           <div style={{ 
             fontSize: 18, 
-            color: isDay ? 'rgba(35, 41, 70, 0.7)' : 'rgba(255, 255, 255, 0.8)',
+            color: isDay ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.9)',
             fontWeight: 500
           }}>Add City</div>
         </>
@@ -123,23 +123,23 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
               width: '100%',
               padding: 12,
               borderRadius: 12,
-              border: `1px solid ${isDay ? 'rgba(35, 41, 70, 0.2)' : 'rgba(255, 255, 255, 0.3)'}`,
+              border: `1px solid ${isDay ? 'rgba(31, 41, 55, 0.3)' : 'rgba(255, 255, 255, 0.4)'}`,
               fontSize: 16,
               marginBottom: 8,
-              backgroundColor: isDay ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.1)',
-              color: isDay ? '#232946' : '#fff',
+              backgroundColor: isDay ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.15)',
+              color: isDay ? '#1f2937' : '#f9fafb',
               outline: 'none',
               transition: 'all 0.2s ease-in-out',
             }}
           />
           {loading && <div style={{ 
             fontSize: 14, 
-            color: isDay ? 'rgba(35, 41, 70, 0.6)' : 'rgba(255, 255, 255, 0.7)',
+            color: isDay ? 'rgba(31, 41, 55, 0.7)' : 'rgba(249, 250, 251, 0.8)',
             fontStyle: 'italic'
           }}>Loading...</div>}
           {error && <div style={{ 
             fontSize: 14, 
-            color: isDay ? '#dc2626' : '#ef4444',
+            color: isDay ? '#dc2626' : '#f87171',
             fontWeight: 500
           }}>{error}</div>}
           {suggestions.length > 0 && (
@@ -151,13 +151,13 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
               top: 52,
               left: 0,
               right: 0,
-              background: isDay ? 'rgba(255, 255, 255, 0.95)' : 'rgba(35, 41, 70, 0.95)',
-              border: `1px solid ${isDay ? 'rgba(35, 41, 70, 0.2)' : 'rgba(255, 255, 255, 0.3)'}`,
+              background: isDay ? 'rgba(255, 255, 255, 0.98)' : 'rgba(30, 41, 59, 0.95)',
+              border: `1px solid ${isDay ? 'rgba(31, 41, 55, 0.25)' : 'rgba(255, 255, 255, 0.4)'}`,
               borderRadius: 12,
               zIndex: 10,
               maxHeight: 180,
               overflowY: 'auto',
-              color: isDay ? '#232946' : '#fff',
+              color: isDay ? '#1f2937' : '#f9fafb',
               backdropFilter: 'blur(8px)',
               boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
             }}>
@@ -167,12 +167,12 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
                   style={{ 
                     padding: 12, 
                     cursor: 'pointer', 
-                    borderBottom: `1px solid ${isDay ? 'rgba(35, 41, 70, 0.1)' : 'rgba(255, 255, 255, 0.1)'}`,
+                    borderBottom: `1px solid ${isDay ? 'rgba(31, 41, 55, 0.15)' : 'rgba(255, 255, 255, 0.15)'}`,
                     transition: 'background-color 0.2s ease-in-out'
                   }}
                   onClick={e => { e.stopPropagation(); handleSelect(s); }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = isDay ? 'rgba(35, 41, 70, 0.05)' : 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.backgroundColor = isDay ? 'rgba(31, 41, 55, 0.08)' : 'rgba(255, 255, 255, 0.12)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = 'transparent';

@@ -62,7 +62,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
         borderRadius: 24,
         padding: window.innerWidth <= 768 ? 16 : 24,
         background: getCardBackground(IsDayTime),
-        color: IsDayTime ? '#232946' : '#fff',
+        color: IsDayTime ? '#1f2937' : '#f9fafb',
         boxShadow: '0 4px 24px rgba(0,0,0,0.08)',
         margin: window.innerWidth <= 768 ? 8 : 16,
         display: 'flex',
@@ -91,9 +91,9 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
             top: 12,
             right: 12,
             background: isHovered 
-              ? (IsDayTime ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.2)')
-              : (IsDayTime ? 'rgba(255, 255, 255, 0.7)' : 'rgba(255, 255, 255, 0.1)'),
-            border: `1px solid ${IsDayTime ? 'rgba(35, 41, 70, 0.15)' : 'rgba(255, 255, 255, 0.3)'}`,
+              ? (IsDayTime ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.25)')
+              : (IsDayTime ? 'rgba(255, 255, 255, 0.85)' : 'rgba(255, 255, 255, 0.15)'),
+            border: `1px solid ${IsDayTime ? 'rgba(31, 41, 55, 0.2)' : 'rgba(255, 255, 255, 0.4)'}`,
             borderRadius: '50%',
             width: 32,
             height: 32,
@@ -101,8 +101,8 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
             fontWeight: 'bold',
             cursor: 'pointer',
             color: isHovered 
-              ? (IsDayTime ? '#dc2626' : '#ef4444')
-              : (IsDayTime ? '#232946' : '#fff'),
+              ? (IsDayTime ? '#dc2626' : '#f87171')
+              : (IsDayTime ? '#1f2937' : '#f9fafb'),
             zIndex: 10,
             display: 'flex',
             alignItems: 'center',

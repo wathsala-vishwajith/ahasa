@@ -159,7 +159,7 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
 
   return (
     <div style={{
-      color: isDayTime ? '#1f2937' : '#f3f4f6',
+      color: isDayTime ? '#1f2937' : '#f9fafb',
       background: isDayTime 
         ? 'linear-gradient(135deg, #bfdbfe 0%, #dbeafe 50%, #f0f9ff 100%)'
         : 'linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)',
@@ -181,7 +181,7 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
         <p style={{ 
           fontSize: '16px', 
           margin: '0 0 16px 0',
-          color: isDayTime ? '#6b7280' : '#d1d5db',
+          color: isDayTime ? '#4b5563' : '#e5e7eb',
           fontWeight: '500'
         }}>
           {formatTime(weatherData.LocalObservationDateTime)}
@@ -200,7 +200,10 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
             <div style={{ fontSize: '18px', fontWeight: '600', textTransform: 'capitalize' }}>
               {weatherData.WeatherText}
             </div>
-            <div style={{ fontSize: '14px', opacity: 0.8 }}>
+            <div style={{ 
+              fontSize: '14px', 
+              color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)'
+            }}>
               Feels like {Math.round(weatherData.RealFeelTemperature.Metric.Value)}°C
             </div>
           </div>
@@ -228,19 +231,19 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '14px' }}>
             <div>
-              <div style={{ opacity: 0.8 }}>Current</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Current</div>
               <div style={{ fontWeight: '600' }}>{Math.round(weatherData.Temperature.Metric.Value)}°C</div>
             </div>
             <div>
-              <div style={{ opacity: 0.8 }}>Real Feel</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Real Feel</div>
               <div style={{ fontWeight: '600' }}>{Math.round(weatherData.RealFeelTemperature.Metric.Value)}°C</div>
             </div>
             <div>
-              <div style={{ opacity: 0.8 }}>In Shade</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>In Shade</div>
               <div style={{ fontWeight: '600' }}>{Math.round(weatherData.RealFeelTemperatureShade.Metric.Value)}°C</div>
             </div>
             <div>
-              <div style={{ opacity: 0.8 }}>Dew Point</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Dew Point</div>
               <div style={{ fontWeight: '600' }}>{Math.round(weatherData.DewPoint.Metric.Value)}°C</div>
             </div>
           </div>
@@ -260,18 +263,18 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
           </h3>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '14px' }}>
             <div>
-              <div style={{ opacity: 0.8 }}>Speed</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Speed</div>
               <div style={{ fontWeight: '600' }}>{weatherData.Wind.Speed.Metric.Value} km/h</div>
             </div>
             <div>
-              <div style={{ opacity: 0.8 }}>Direction</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Direction</div>
               <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <FaCompass size={12} />
                 {weatherData.Wind.Direction.Localized} ({weatherData.Wind.Direction.Degrees}°)
               </div>
             </div>
             <div style={{ gridColumn: 'span 2' }}>
-              <div style={{ opacity: 0.8 }}>Gust Speed</div>
+              <div style={{ color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)' }}>Gust Speed</div>
               <div style={{ fontWeight: '600' }}>{weatherData.WindGust.Speed.Metric.Value} km/h</div>
             </div>
           </div>
@@ -295,7 +298,11 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
           border: `1px solid ${isDayTime ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.15)'}`
         }}>
           <WiHumidity size={32} style={{ marginBottom: '8px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '4px' }}>Humidity</div>
+          <div style={{ 
+            fontSize: '12px', 
+            color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)', 
+            marginBottom: '4px' 
+          }}>Humidity</div>
           <div style={{ fontSize: '20px', fontWeight: '600' }}>{weatherData.RelativeHumidity}%</div>
         </div>
 
@@ -309,7 +316,11 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
           border: `1px solid ${isDayTime ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.15)'}`
         }}>
           {isDayTime ? <WiDaySunny size={32} style={{ marginBottom: '8px', color: getUVColor(weatherData.UVIndex) }} /> : <WiNightClear size={32} style={{ marginBottom: '8px' }} />}
-          <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '4px' }}>UV Index</div>
+          <div style={{ 
+            fontSize: '12px', 
+            color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)', 
+            marginBottom: '4px' 
+          }}>UV Index</div>
           <div style={{ fontSize: '20px', fontWeight: '600', color: getUVColor(weatherData.UVIndex) }}>
             {weatherData.UVIndex} - {weatherData.UVIndexText}
           </div>
@@ -325,7 +336,11 @@ const WeatherDetailsView: React.FC<WeatherDetailsViewProps> = ({ location, weath
           border: `1px solid ${isDayTime ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.15)'}`
         }}>
           <BsEye size={32} style={{ marginBottom: '8px' }} />
-          <div style={{ fontSize: '12px', opacity: 0.8, marginBottom: '4px' }}>Visibility</div>
+          <div style={{ 
+            fontSize: '12px', 
+            color: isDayTime ? 'rgba(31, 41, 55, 0.8)' : 'rgba(249, 250, 251, 0.8)', 
+            marginBottom: '4px' 
+          }}>Visibility</div>
           <div style={{ fontSize: '20px', fontWeight: '600' }}>
             {getValue(weatherData.Visibility.Metric.Value)} km
           </div>

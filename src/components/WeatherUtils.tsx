@@ -93,6 +93,6 @@ export const getWeatherIcon = (iconNumber: number | null, isDay: boolean) => {
 // Helper to get card background based on day/night
 export const getCardBackground = (isDay: boolean) => {
   return isDay
-    ? 'linear-gradient(135deg, #7fd8ff 0%, #a6e0ff 100%)'
-    : 'linear-gradient(135deg, #232946 0%, #3a3f5a 100%)';
+    ? 'linear-gradient(135deg, #7dd3fc 0%, #bae6fd 100%)'
+    : 'linear-gradient(135deg, #1e293b 0%, #334155 100%)';
 }; 
