@@ -7,6 +7,7 @@ import { fetchCurrentCondition, fetchDetailedCurrentCondition } from './services
 import type { AccuWeatherCurrentCondition } from './services/accuweather';
 import Modal from './components/Modal';
 import WeatherDetailsView from './components/WeatherDetailsView';
+import useDarkMode from './hooks/useDarkMode';
 
 interface CardData {
   id: string;
@@ -50,6 +51,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [detailedWeatherData, setDetailedWeatherData] = useState<any | null>(null);
   const [loadingDetailedData, setLoadingDetailedData] = useState(false);
+  const darkMode = useDarkMode();
 
   // Load cards from localStorage on app initialization
   useEffect(() => {
@@ -164,14 +166,14 @@ function App() {
               fontSize: '24px', 
               marginBottom: '8px', 
               fontWeight: 600,
-              color: document.documentElement.classList.contains('dark') ? '#f9fafb' : '#1f2937'
+              color: darkMode ? '#f9fafb' : '#1f2937'
             }}>
               Welcome to Ahasa Weather
             </h2>
             <p style={{ 
               fontSize: '16px', 
               marginBottom: '24px',
-              color: document.documentElement.classList.contains('dark') ? 'rgba(249, 250, 251, 0.8)' : 'rgba(31, 41, 55, 0.8)'
+              color: darkMode ? 'rgba(249, 250, 251, 0.8)' : 'rgba(31, 41, 55, 0.8)'
             }}>
               Start by adding your first city to see the weather
             </p>
@@ -201,7 +203,7 @@ function App() {
               <div style={{ 
                 textAlign: 'center', 
                 padding: '40px',
-                color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#6b7280' 
+                color: darkMode ? '#d1d5db' : '#6b7280' 
               }}>
                 <div style={{ fontSize: '18px', marginBottom: '16px' }}>
                   Loading detailed weather data...
@@ -225,11 +227,11 @@ function App() {
               <div style={{ 
                 textAlign: 'center', 
                 padding: '40px',
-                color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#6b7280' 
+                color: darkMode ? '#d1d5db' : '#6b7280' 
               }}>
                 <h2 style={{ 
                   marginBottom: '16px',
-                  color: document.documentElement.classList.contains('dark') ? '#f9fafb' : '#1f2937'
+                  color: darkMode ? '#f9fafb' : '#1f2937'
                 }}>{selectedCard.location}</h2>
                 <p>Unable to load detailed weather data</p>
               </div>
