@@ -26,11 +26,13 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [selectedSuggestion, setSelectedSuggestion] = useState<AccuWeatherLocation | null>(null);
   
   const isDay = isDayTime();
 
   const handleInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
+    setSelectedSuggestion(null); // Clear selection on input change
     if (e.target.value.length > 1) {
       setLoading(true);
       setError(null);
@@ -47,27 +49,29 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
     }
   };
 
-  const handleSelect = async (loc: AccuWeatherLocation) => {
+  const handleSelect = (loc: AccuWeatherLocation) => {
     setInput(loc.LocalizedName);
+    setSelectedSuggestion(loc);
     setSuggestions([]);
-    setShowInput(false);
-    setLoading(true);
-    try {
-      const condition = await fetchCurrentCondition(loc.Key);
-      onAdd(loc.LocalizedName, loc.Key, condition);
-    } catch (err) {
-      setError('Failed to fetch weather');
-    } finally {
-      setLoading(false);
-    }
+    // Do not auto-add, wait for user to click Add
   };
 
-  const handleAdd = (e: React.FormEvent) => {
+  const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (input.trim()) {
-      onAdd(input.trim());
-      setInput('');
-      setShowInput(false);
+    if (selectedSuggestion) {
+      setLoading(true);
+      setError(null);
+      try {
+        const condition = await fetchCurrentCondition(selectedSuggestion.Key);
+        onAdd(selectedSuggestion.LocalizedName, selectedSuggestion.Key, condition);
+        setInput('');
+        setShowInput(false);
+        setSelectedSuggestion(null);
+      } catch (err) {
+        setError('Failed to fetch weather');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -196,19 +200,11 @@ const AddWeatherCard: React.FC<AddWeatherCardProps> = ({ onAdd }) => {
               color: '#fff',
               fontWeight: 700,
               fontSize: 16,
-              cursor: 'pointer',
+              cursor: selectedSuggestion ? 'pointer' : 'not-allowed',
               marginTop: 8,
-              transition: 'all 0.2s ease-in-out',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              opacity: selectedSuggestion ? 1 : 0.5,
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.15)';
-            }}
+            disabled={!selectedSuggestion || loading}
           >
             Add
           </button>
