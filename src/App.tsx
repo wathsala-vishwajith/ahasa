@@ -222,6 +222,7 @@ function App() {
               <WeatherDetailsView 
                 location={selectedCard.location} 
                 weatherData={detailedWeatherData} 
+                locationKey={selectedCard.locationKey || ''}
               />
             ) : (
               <div style={{ 
