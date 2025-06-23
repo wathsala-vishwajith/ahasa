@@ -2,7 +2,7 @@ import './App.css'
 import DarkModeToggle from './components/DarkModeToggle/DarkModeToggle';
 import WeatherCard from './components/WeatherCard';
 import AddWeatherCard from './components/AddWeatherCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { fetchCurrentCondition, fetchDetailedCurrentCondition } from './services/accuweather';
 import type { AccuWeatherCurrentCondition } from './services/accuweather';
 import Modal from './components/Modal';
@@ -14,6 +14,7 @@ interface CardData {
   location: string;
   locationKey?: string;
   condition?: AccuWeatherCurrentCondition | null;
+  expires?: Date | null;
 }
 
 // Local storage key for saved weather cards
@@ -50,8 +51,14 @@ function App() {
   const [cards, setCards] = useState<CardData[]>([]);
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
   const [detailedWeatherData, setDetailedWeatherData] = useState<any | null>(null);
+  const [detailedWeatherExpires, setDetailedWeatherExpires] = useState<Date | null>(null);
   const [loadingDetailedData, setLoadingDetailedData] = useState(false);
   const darkMode = useDarkMode();
+  const [autoRefresh, setAutoRefresh] = useState(() => {
+    const stored = localStorage.getItem('ahasa-auto-refresh');
+    return stored ? stored === 'true' : false;
+  });
+  const refreshTimers = useRef<Map<string, number>>(new Map());
 
   // Load cards from localStorage on app initialization
   useEffect(() => {
@@ -70,8 +77,8 @@ function App() {
         cards.map(async (card) => {
           if (card.locationKey && !card.condition) {
             try {
-              const condition = await fetchCurrentCondition(card.locationKey);
-              return { ...card, condition };
+              const { data, expires } = await fetchCurrentCondition(card.locationKey);
+              return { ...card, condition: data, expires };
             } catch (error) {
               console.error(`Failed to fetch weather for ${card.location}`, error);
               return card; // return original card if fetch fails
@@ -96,11 +103,73 @@ function App() {
     }
   }, [cards]);
 
-  const handleAddCard = (city: string, locationKey?: string, condition?: any) => {
+  // Persist autoRefresh to localStorage
+  useEffect(() => {
+    localStorage.setItem('ahasa-auto-refresh', autoRefresh ? 'true' : 'false');
+  }, [autoRefresh]);
+
+  // Helper to clear all refresh timers
+  const clearAllRefreshTimers = () => {
+    refreshTimers.current.forEach(timer => clearTimeout(timer));
+    refreshTimers.current.clear();
+  };
+
+  // Helper to schedule a refresh for a card
+  const scheduleCardRefresh = (card: CardData) => {
+    if (!autoRefresh || !card.expires || !card.locationKey) return;
+    const now = Date.now();
+    const expiresAt = card.expires.getTime();
+    const delay = Math.max(expiresAt - now, 10_000); // fallback: at least 10s
+    if (refreshTimers.current.has(card.id)) {
+      clearTimeout(refreshTimers.current.get(card.id));
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const { data, expires } = await fetchCurrentCondition(card.locationKey!);
+        setCards(prevCards => prevCards.map(c => c.id === card.id ? { ...c, condition: data, expires } : c));
+        // Reschedule
+        scheduleCardRefresh({ ...card, expires });
+      } catch (e) {
+        // Try again in 5 minutes if error
+        const retryTimer = setTimeout(() => scheduleCardRefresh(card), 5 * 60 * 1000);
+        refreshTimers.current.set(card.id, retryTimer);
+      }
+    }, delay);
+    refreshTimers.current.set(card.id, timer);
+  };
+
+  // Effect: schedule/clear refreshes when autoRefresh or cards change
+  useEffect(() => {
+    clearAllRefreshTimers();
+    if (autoRefresh) {
+      cards.forEach(card => {
+        if (card.expires && card.locationKey) {
+          scheduleCardRefresh(card);
+        }
+      });
+    }
+    return clearAllRefreshTimers;
+    // eslint-disable-next-line
+  }, [autoRefresh, cards.length]);
+
+  const handleAddCard = async (city: string, locationKey?: string) => {
     const id = (locationKey || city.toLowerCase().replace(/\s+/g, '-'));
     if (!cards.some(card => card.id === id)) {
-      const newCard = { id, location: city, locationKey, condition };
-      setCards(prevCards => [...prevCards, newCard]);
+      if (locationKey) {
+        try {
+          const { data, expires } = await fetchCurrentCondition(locationKey);
+          const newCard = { id, location: city, locationKey, condition: data, expires };
+          setCards(prevCards => [...prevCards, newCard]);
+        } catch (e) {
+          // fallback: add without condition
+          const newCard = { id, location: city, locationKey };
+          setCards(prevCards => [...prevCards, newCard]);
+        }
+      } else {
+        // fallback: add without condition
+        const newCard = { id, location: city, locationKey };
+        setCards(prevCards => [...prevCards, newCard]);
+      }
     }
   };
 
@@ -111,12 +180,13 @@ function App() {
   const handleCardClick = async (card: CardData) => {
     setSelectedCard(card);
     setDetailedWeatherData(null);
-    
+    setDetailedWeatherExpires(null);
     if (card.locationKey) {
       setLoadingDetailedData(true);
       try {
-        const detailedData = await fetchDetailedCurrentCondition(card.locationKey);
-        setDetailedWeatherData(detailedData);
+        const { data, expires } = await fetchDetailedCurrentCondition(card.locationKey);
+        setDetailedWeatherData(data);
+        setDetailedWeatherExpires(expires);
       } catch (error) {
         console.error(`Failed to fetch detailed weather for ${card.location}`, error);
       } finally {
@@ -143,8 +213,20 @@ function App() {
         position: 'absolute', 
         top: '8px', 
         right: '8px',
-        zIndex: 10
+        zIndex: 10,
+        display: 'flex',
+        gap: 12,
+        alignItems: 'center'
       }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 14, cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={autoRefresh}
+            onChange={e => setAutoRefresh(e.target.checked)}
+            style={{ accentColor: '#3b82f6' }}
+          />
+          Auto Refresh
+        </label>
         <DarkModeToggle />
       </div>
       <div style={{ 

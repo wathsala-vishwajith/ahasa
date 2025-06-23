@@ -123,24 +123,24 @@ const WeatherCard: React.FC<WeatherCardProps> = ({ id, location, condition, onRe
       <div style={{ fontWeight: 700, fontSize: 28, marginBottom: 8, textAlign: 'center', zIndex: 5, position: 'relative' }}>{location}</div>
       <div style={{ zIndex: 5, position: 'relative' }}>{getWeatherIcon(WeatherIcon, IsDayTime)}</div>
       <div style={{ fontSize: 40, fontWeight: 700, margin: '8px 0', zIndex: 5, position: 'relative' }}>
-        {tempValue !== null ? `${Math.round(tempValue)}°C` : 'N/A'}
+        {typeof tempValue === 'number' && isFinite(tempValue) ? `${Math.round(tempValue)}°C` : 'N/A'}
       </div>
       <div style={{ fontSize: 18, marginBottom: 16, textTransform: 'capitalize', zIndex: 5, position: 'relative' }}>{WeatherText || 'N/A'}</div>
       <div style={{ display: 'flex', gap: 16, width: '100%', justifyContent: 'space-between', marginTop: 16, zIndex: 5, position: 'relative' }}>
         <div style={{ textAlign: 'center' }}>
           <WiStrongWind size={28} />
           <div style={{ fontSize: 16 }}>
-            {Wind?.Speed?.Metric?.Value ?? 'N/A'}<span style={{ fontSize: 12 }}>km/h</span>
+            {typeof Wind?.Speed?.Metric?.Value === 'number' && isFinite(Wind?.Speed?.Metric?.Value) ? Wind.Speed.Metric.Value : 'N/A'}<span style={{ fontSize: 12 }}>km/h</span>
           </div>
         </div>
         <div style={{ textAlign: 'center' }}>
           <WiHumidity size={28} />
-          <div style={{ fontSize: 16 }}>{RelativeHumidity ?? 'N/A'}%</div>
+          <div style={{ fontSize: 16 }}>{typeof RelativeHumidity === 'number' && isFinite(RelativeHumidity) ? RelativeHumidity : 'N/A'}%</div>
         </div>
         <div style={{ textAlign: 'center' }}>
           <WiThermometer size={28} />
           <div style={{ fontSize: 16 }}>
-            {realFeelValue !== null ? `${Math.round(realFeelValue)}°C` : 'N/A'}
+            {typeof realFeelValue === 'number' && isFinite(realFeelValue) ? `${Math.round(realFeelValue)}°C` : 'N/A'}
           </div>
         </div>
       </div>
